@@ -67,7 +67,7 @@ def final_sessions(df_row):
     sessions['address'] = address_new_format
     sessions['fee_type'] = df_row['fee_type']
     sessions['cost'] = cost
-    appointment_df = appointment_df.append(sessions)
+    appointment_df = appointment_df.append(sessions, ignore_index = True)
 # %%
 # function to get sessions using the url created by search_by_pincode function or search_by_district function
 def appointment(date):
