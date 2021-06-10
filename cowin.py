@@ -47,7 +47,7 @@ def search_by_pincode(pincode):
 # %%
 # creates a dataframe appointment_df with all the required details to be displayed
 def final_sessions(df_row):
-    global appointment_df
+    global appointment_df, flag
     df_row.fillna(0, inplace = True)
     if(df_row['fee_type']  == 'Free'):
         cost = str(0)
@@ -68,19 +68,16 @@ def final_sessions(df_row):
     sessions['fee_type'] = df_row['fee_type']
     sessions['cost'] = cost
     appointment_df = appointment_df.append(sessions)
-    appointment_df.drop_duplicates(subset = ['date', 'min_age_limit', 'name'], keep = 'first', inplace = True)
 # %%
 # function to get sessions using the url created by search_by_pincode function or search_by_district function
 def appointment(date):
-    global centers_df
     final_url = url_appointment + date
     appointment_response = requests.get(final_url, headers = head)
     assert (appointment_response), 'Error in getting session details 👎'
     print('Got Sessions Details 👍')
     centers_list = appointment_response.json()['centers']
     centers_df = pd.DataFrame(centers_list)
-    if(not centers_df.empty):
-        centers_df.apply(final_sessions, axis = 1)
+    centers_df.apply(final_sessions, axis = 1)
 # %%
 # function to get sessions for 2 weeks (default cowin sends 1 week data)
 def get_appointment():
