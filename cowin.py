@@ -68,6 +68,7 @@ def final_sessions(df_row):
     sessions['fee_type'] = df_row['fee_type']
     sessions['cost'] = cost
     appointment_df = appointment_df.append(sessions)
+    appointment_df.drop_duplicates(subset = ['date', 'min_age_limit', 'name'], keep = 'first', inplace = True)
 # %%
 # function to get sessions using the url created by search_by_pincode function or search_by_district function
 def appointment(date):
@@ -89,9 +90,8 @@ def get_appointment():
     date = current_datetime.strftime('%d-%m-%Y')
     appointment_df = pd.DataFrame()
     appointment(date)
-    if(not centers_df.empty):
-        # adding 7 days to the current date to fetch next week data
-        print('Getting second week data 🙂')
-        date = (current_datetime + timedelta(days = 7)).strftime('%d-%m-%Y')
-        appointment(date)
+    # adding 7 days to the current date to fetch next week data
+    print('Getting second week data 🙂')
+    date = (current_datetime + timedelta(days = 7)).strftime('%d-%m-%Y')
+    appointment(date)
 # %%
