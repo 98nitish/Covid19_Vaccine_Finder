@@ -228,8 +228,8 @@ def continous_search():
             slots_found()
             break
 
-        print('No slots found, will try again after 15 mins. 👎')
-        time.sleep(15 * 60)
+        print('No slots found, will try again after 5 mins. 👎')
+        time.sleep(5 * 60)
         cowin.get_appointment()
 # %%
 #  creating the home interface
