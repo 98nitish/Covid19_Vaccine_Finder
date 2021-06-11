@@ -47,13 +47,14 @@ def search_by_pincode(pincode):
 # %%
 # function to get cost of vaccine
 def vaccine_cost(df_row):
+    global costs_df
     if(df_row['fee_type']  == 'Free'):
         cost = str(0)
     else:
         if(not costs == 0):
             costs_df = pd.DataFrame(costs)
             cost_filt = costs_df['vaccine'] == df_row['vaccine']
-            cost = costs_df.loc[cost_filt, 'fee']
+            cost = str(costs_df.loc[cost_filt, 'fee'].item())
     df_row['cost'] = cost
     return df_row
 # %%
