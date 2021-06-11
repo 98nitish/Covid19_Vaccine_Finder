@@ -149,11 +149,22 @@ def close_warning():
     if(warning_message):
         window.destroy()
 # %%
+# function for filtering so continous_search function gets new boolean_indexes
+def filtering():
+    # creating filter variable with all those filters which were taken as input from user
+    global filt
+    filt = (cowin.appointment_df[dose] > 0)\
+        & (cowin.appointment_df['min_age_limit'] == min_age.get())\
+            & (cowin.appointment_df['fee_type'].isin(cost))\
+                & (cowin.appointment_df['vaccine'].isin(available_vaccine))
+# %%
 # applying filter and creating thread for continuous search
 def filters():
     for frame in window.winfo_children():
         frame.destroy()
     frame1 = Frame(window).place()
+
+    global dose, cost, available_vaccine
 
     if(vaccine.get() == 'Any'):
         available_vaccine = list(cowin.appointment_df['vaccine'].unique())
@@ -165,15 +176,9 @@ def filters():
     else:
         cost = [fee_type.get()]
 
-    # creating filter variable with all those filters which were taken as input from user
-    global filt, dose
     dose_type_dict = {'Dose 1' : 'available_capacity_dose1', 'Dose 2' : 'available_capacity_dose2'}
     dose = dose_type_dict[dose_type.get()]
-    filt = (cowin.appointment_df[dose] > 0)\
-        & (cowin.appointment_df['min_age_limit'] == min_age.get())\
-            & (cowin.appointment_df['fee_type'].isin(cost))\
-                & (cowin.appointment_df['vaccine'].isin(available_vaccine))
-
+    filtering()
     label = Label(frame1, text = 'Searching Vaccine Stay Tuned 😁', foreground = 'black').place(x = 100, y = 100)
     button_stop = Button(frame1, text = 'Stop', command = close_warning, foreground = 'black').place(x = 170, y = 150)
     # creating thread and setting it as daemon so the thread gets killed once the main process is closed
@@ -220,7 +225,11 @@ def slots_found():
 # the data is fetched in every 15 mins if there is no match 
 def continous_search():
     global available_appointment
+    search_count = 0
     while(True):
+        search_count += 1
+        print('Try', search_count)
+        filtering()
         available_appointment = cowin.appointment_df.loc[filt]
         # checking if there is a match
         if(not available_appointment.empty):
