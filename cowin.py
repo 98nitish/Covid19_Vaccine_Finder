@@ -45,15 +45,24 @@ def search_by_pincode(pincode):
     url_appointment = server + 'v2/appointment/sessions/public/calendarByPin?pincode='\
                         + pin + '&date='
 # %%
-# creates a dataframe appointment_df with all the required details to be displayed
-def final_sessions(df_row):
-    global appointment_df, flag
-    df_row.fillna(0, inplace = True)
+# function to get cost of vaccine
+def vaccine_cost(df_row):
     if(df_row['fee_type']  == 'Free'):
         cost = str(0)
     else:
-        cost = df_row['vaccine_fees'][0]['fee']
+        if(not costs == 0):
+            costs_df = pd.DataFrame(costs)
+            cost_filt = costs_df['vaccine'] == df_row['vaccine']
+            cost = costs_df.loc[cost_filt, 'fee']
+    df_row['cost'] = cost
+    return df_row
+# %%
+# creates a dataframe appointment_df with all the required details to be displayed
+def final_sessions(df_row):
+    global appointment_df, costs
     sessions = pd.DataFrame(df_row['sessions'])
+    df_row.fillna(0, inplace = True)
+    costs = df_row['vaccine_fees']
     sessions.drop(['session_id', 'available_capacity'], axis = 1, inplace = True)
     sessions['name'] = df_row['name']
     address_old_format = df_row['address']
@@ -66,8 +75,8 @@ def final_sessions(df_row):
         address_new_format = address_old_format
     sessions['address'] = address_new_format
     sessions['fee_type'] = df_row['fee_type']
-    sessions['cost'] = cost
-    appointment_df = appointment_df.append(sessions, ignore_index = True)
+    appointments = sessions.apply(vaccine_cost, axis = 1)
+    appointment_df = appointment_df.append(appointments, ignore_index = True)
 # %%
 # function to get sessions using the url created by search_by_pincode function or search_by_district function
 def appointment(date):
