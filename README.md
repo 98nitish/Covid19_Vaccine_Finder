@@ -9,4 +9,4 @@ The options that the user get are:
 - After step 2, the user needs to apply filters for the vaccine (like vaccines type, cost, min age, dose type)
 - Once the filters are applied the application starts the search for the vaccine which the user chose.
   - If the vaccine is found the user gets a prompt that slots are found and displays the details.
-  - If there is no slots for the vaccine the user selected, the application keeps on searching for the slots every 15 mins until a slot is found or the user terminates the program.
+  - If there is no slots for the vaccine the user selected, the application keeps on searching for the slots every 5 mins until a slot is found or the user terminates the program.
