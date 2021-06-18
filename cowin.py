@@ -63,7 +63,8 @@ def final_sessions(df_row):
     global appointment_df, costs
     sessions = pd.DataFrame(df_row['sessions'])
     df_row.fillna(0, inplace = True)
-    costs = df_row['vaccine_fees']
+    if(df_row['fee_type'] == 'Paid'):
+        costs = df_row['vaccine_fees']
     sessions.drop(['session_id', 'available_capacity'], axis = 1, inplace = True)
     sessions['name'] = df_row['name']
     address_old_format = df_row['address']
