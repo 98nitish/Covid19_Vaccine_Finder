@@ -5,6 +5,7 @@ from tkinter.ttk import Combobox, Treeview, Style
 import cowin
 import time
 import threading
+import pandas as tf
 # %%
 window = Tk()
 window.geometry('400x300')
