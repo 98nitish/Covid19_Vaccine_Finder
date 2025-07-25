@@ -1,5 +1,5 @@
 # %%
-# All imports
+# All import
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import Combobox, Treeview, Style
